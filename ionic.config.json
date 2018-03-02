@@ -1,0 +1,15 @@
+{
+  "name": "pantado_liveclass",
+  "app_id": "e5fb838c",
+  "type": "ionic1",
+  "integrations": {
+    "gulp": {},
+    "cordova": {}
+  },
+  "watchPatterns": [
+    "scss/**/*",
+    "www/**/*",
+    "!www/lib/**/*",
+    "!www/**/*.map"
+  ]
+}
