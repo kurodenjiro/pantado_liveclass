@@ -67,7 +67,22 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         controller: 'PlaylistCtrl'
       }
     }
-  });
+  })
+  .state('app.login', {
+	  url: '/login',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/login.html',
+          controller: 'AppCtrl'
+        }
+      }
+  })
+  ;
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  if('1' === localStorage.getItem('userLogined')) {
+	  $urlRouterProvider.otherwise('/app/playlists');
+  } else {
+	  $urlRouterProvider.otherwise('/app/login');
+  }
+  
 });

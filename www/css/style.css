@@ -1,1 +1,7 @@
 /* Empty. Add your own CSS if you like */
+.img-lecture {
+	width: 64px;
+	height: 64px;
+	float: left;
+	margin-right: 15px;
+}
