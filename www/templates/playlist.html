@@ -1,6 +1,7 @@
 <ion-view view-title="Playlist">
   <ion-content>
     <h1>{{playlist.title}}</h1>
-	<iframe src="{{playlist.url}}" />
+	<div class="video-container"><iframe width="853" height="480" src="https://www.youtube.com/embed/{{playlist.youtubeId}}" frameborder="0" allowfullscreen</iframe</div>
+
   </ion-content>
 </ion-view>

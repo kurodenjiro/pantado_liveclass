@@ -63,7 +63,7 @@ angular.module('starter.controllers', [])
     { title: 'Cowbell', id: 6 }
   ];*/
   
-  $http.get("http://pantado.edu.vn/api/category/lecture/list.php?categoryId=1").then(function(response) {
+  $http.get("https://pantado.edu.vn/api/category/lecture/list.php?categoryId=1").then(function(response) {
         $scope.playlists = response.data;
     });
   
@@ -72,13 +72,19 @@ angular.module('starter.controllers', [])
 	});
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams, $state, $http) {
+.controller('PlaylistCtrl', function($scope, $stateParams, $state, $http, $sceDelegate, $sce) {
+	console.log($sceDelegate);
+	$sceDelegate.trustAs($sce.RESOURCE_URL, 'https://www.youtube.com/**');
 	$scope.$on('$ionicView.enter', function(e) {
 		check_access($state);
 	});
 	var lectureId = $stateParams.playlistId;
-	$http.get("http://pantado.edu.vn/api/category/lecture/detail.php?categoryId=1&lectureId=" + lectureId).then(function(response) {
+	$http.get("https://pantado.edu.vn/api/category/lecture/detail.php?categoryId=1&lectureId=" + lectureId).then(function(response) {
         $scope.playlist = response.data;
+		var youtubeId = $scope.playlist.url.split('=').pop();
+		console.log($scope.playlist);
+		console.log(youtubeId);
+		$scope.playlist.youtubeId = youtubeId;
     });
 });
 
