@@ -19,8 +19,11 @@
     <ion-content>
       <ion-list>
 		
-        <ion-item ngIf menu-close ng-click="login()">
+        <ion-item ngIf menu-close ng-hide={{checkIsLogined()}} ng-click="login()">
           Login
+        </ion-item>
+		<ion-item ng-show={{checkIsLogined()}} >
+          Username: {{getUsername()}}
         </ion-item>
 		<!--
         <ion-item menu-close href="#/app/search">
@@ -31,10 +34,10 @@
           Browse
         </ion-item>
 		-->
-        <ion-item menu-close href="#/app/playlists">
+        <ion-item menu-close ng-show="checkIsLogined()" href="#/app/playlists">
           Playlists
         </ion-item>
-		<ion-item menu-close ng-click="doLogout()">
+		<ion-item menu-close ng-show="checkIsLogined()" ng-click="doLogout()">
           Logout
         </ion-item>
       </ion-list>

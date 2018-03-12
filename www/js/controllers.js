@@ -34,6 +34,14 @@ angular.module('starter.controllers', [])
   }).then(function(modal) {
     $scope.loadingModal = modal;
   });
+  
+  $scope.checkIsLogined = function() {
+	  return localStorage.getItem('userLogined') === '1';
+  };
+  
+  $scope.getUsername = function() {
+	  return localStorage.getItem('username');
+  };
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
@@ -45,16 +53,21 @@ angular.module('starter.controllers', [])
 		  method: 'GET',
 		  url: 'https://pantado.edu.vn/api/user/login.php?'+encodeQueryData($scope.loginData)		  
 	  }).then(function(resp) {
-		  $scope.loadingModal.hide();
-		  for(var name in resp.data) {
-			  $scope[name] = resp.data[name];
-		  }
-		  if($scope.success) {
-			  localStorage.setItem('userLogined', '1');
-			$state.go('app.playlists');
-		  } else {
-			  localStorage.setItem('userLogined', '0');
-		  }
+		  setTimeout(function() {
+			  $scope.loadingModal.hide();
+			  for(var name in resp.data) {
+				  $scope[name] = resp.data[name];
+			  }
+			  if($scope.success) {
+				  localStorage.setItem('userLogined', '1');
+				  localStorage.setItem('username', username);
+				$state.go('app.playlists');
+			  } else {
+				  localStorage.setItem('userLogined', '0');
+				  localStorage.setItem('username', '');
+			  }
+		  }, 500);
+		  
 	  });
     // Simulate a login delay. Remove this and replace with your login
     // code if using a login system
