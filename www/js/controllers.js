@@ -28,16 +28,24 @@ angular.module('starter.controllers', [])
   $scope.login = function() {
     $scope.modal.show();
   };
+  
+  $ionicModal.fromTemplateUrl('templates/loading.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.loadingModal = modal;
+  });
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
 	var username = $scope.loginData.username;
 	var password = $scope.loginData.password;
+	$scope.loadingModal.show();
 	$http({
 		  method: 'GET',
 		  url: 'https://pantado.edu.vn/api/user/login.php?'+encodeQueryData($scope.loginData)		  
 	  }).then(function(resp) {
+		  $scope.loadingModal.hide();
 		  for(var name in resp.data) {
 			  $scope[name] = resp.data[name];
 		  }
