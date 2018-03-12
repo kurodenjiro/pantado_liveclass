@@ -73,13 +73,16 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams, $state, $http, $sceDelegate, $sce) {
-	
+	$scope.trustSrc = function(src) {
+		return $sce.trustAsResourceUrl(src);
+	  }
 	// $sceDelegate.trustAs($sce.RESOURCE_URL, 'https://www.youtube.com/**');
 	$scope.playlist = {
 		title: '',
 		url: '',
 		youtubeId: 'aaaaaaa',
-		embedUrl: 'https://www.youtube.com/embed/aaaaaaa'
+		embedUrl: 'https://www.youtube.com/embed/aaaaaaa',
+		others: []
 	};
 	var lectureId = $stateParams.playlistId;
 	$http.get("https://pantado.edu.vn/api/category/lecture/detail.php?categoryId=1&lectureId=" + lectureId).then(function(response) {
