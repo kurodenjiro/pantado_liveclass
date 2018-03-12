@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state, $http) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -34,12 +34,20 @@ angular.module('starter.controllers', [])
     console.log('Doing login', $scope.loginData);
 	var username = $scope.loginData.username;
 	var password = $scope.loginData.password;
-	if(username == 'admin' && password == '123456') {
-		localStorage.setItem('userLogined', '1');
-		$state.go('app.playlists');
-  } else {
-	  localStorage.setItem('userLogined', '0');
-  }
+	$http({
+		  method: 'GET',
+		  url: 'https://pantado.edu.vn/api/user/login.php?'+encodeQueryData($scope.loginData)		  
+	  }).then(function(resp) {
+		  for(var name in resp.data) {
+			  $scope[name] = resp.data[name];
+		  }
+		  if($scope.success) {
+			  localStorage.setItem('userLogined', '1');
+			$state.go('app.playlists');
+		  } else {
+			  localStorage.setItem('userLogined', '0');
+		  }
+	  });
     // Simulate a login delay. Remove this and replace with your login
     // code if using a login system
     $timeout(function() {
@@ -77,13 +85,14 @@ angular.module('starter.controllers', [])
 		return $sce.trustAsResourceUrl(src);
 	  }
 	// $sceDelegate.trustAs($sce.RESOURCE_URL, 'https://www.youtube.com/**');
+	/*
 	$scope.playlist = {
 		title: '',
 		url: '',
 		youtubeId: 'aaaaaaa',
 		embedUrl: 'https://www.youtube.com/embed/aaaaaaa',
 		others: []
-	};
+	};*/
 	var lectureId = $stateParams.playlistId;
 	$http.get("https://pantado.edu.vn/api/category/lecture/detail.php?categoryId=1&lectureId=" + lectureId).then(function(response) {
         $scope.playlist = response.data;
@@ -104,4 +113,11 @@ function check_access($state) {
 	} else {
 		$state.go('app.login');
 	}
+}
+
+function encodeQueryData(data) {
+   let ret = [];
+   for (let d in data)
+     ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+   return ret.join('&');
 }
