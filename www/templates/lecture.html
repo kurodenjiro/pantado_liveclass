@@ -1,0 +1,18 @@
+<ion-view view-title="Lecture">
+  <ion-content>
+  <div class="playlists">
+	<strong ng-repeat="playlist in playlists">
+		[<a href="#/app/playlist/{{playlist.id}}">{{playlist.title}}</a>] 
+	</strong>
+	</div>
+    <h1>{{lecture.title}}</h1>
+	<div class="video-container"><iframe width="853" height="480" ng-src="{{trustSrc(lecture.embedUrl)}}" frameborder="0" allowfullscreen ></iframe></div>
+	<h2>Others</h2>
+	<ion-list>
+      <ion-item ng-repeat="pl in lecture.others" href="#/app/lecture/{{pl.id}}">
+        <img src="{{pl.image}}" class="img-lecture" />
+		{{pl.title}}
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
