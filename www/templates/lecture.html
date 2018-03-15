@@ -9,7 +9,7 @@
 	<div class="video-container"><iframe width="853" height="480" ng-src="{{trustSrc(lecture.embedUrl)}}" frameborder="0" allowfullscreen ></iframe></div>
 	<h2>Others</h2>
 	<ion-list>
-      <ion-item ng-repeat="pl in lecture.others" href="#/app/lecture/{{pl.id}}">
+      <ion-item ng-repeat="pl in lecture.others" href="#/app/lecture/{{playlistId}}/{{pl.id}}">
         <img src="{{pl.image}}" class="img-lecture" />
 		{{pl.title}}
       </ion-item>
