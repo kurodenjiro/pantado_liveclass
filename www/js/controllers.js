@@ -82,17 +82,8 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PlaylistsCtrl', function($scope, $stateParams, $state, $http) {
-	/*
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];*/
   
-  $http.get("https://pantado.edu.vn/api/category/lecture/list.php?categoryId=1").then(function(response) {
+  $http.get("https://pantado.edu.vn/api/category/list.php").then(function(response) {
         $scope.playlists = response.data;
     });
   
@@ -105,28 +96,50 @@ angular.module('starter.controllers', [])
 	$scope.trustSrc = function(src) {
 		return $sce.trustAsResourceUrl(src);
 	  }
-	// $sceDelegate.trustAs($sce.RESOURCE_URL, 'https://www.youtube.com/**');
-	/*
-	$scope.playlist = {
-		title: '',
-		url: '',
-		youtubeId: 'aaaaaaa',
-		embedUrl: 'https://www.youtube.com/embed/aaaaaaa',
-		others: []
-	};*/
-	var lectureId = $stateParams.playlistId;
-	$http.get("https://pantado.edu.vn/api/category/lecture/detail.php?categoryId=1&lectureId=" + lectureId).then(function(response) {
-        $scope.playlist = response.data;
-		var youtubeId = $scope.playlist.url.split('=').pop();
-		$scope.playlist.youtubeId = youtubeId;
-		$scope.playlist.embedUrl = 'https://www.youtube.com/embed/' + youtubeId;
+	
+	$http.get("https://pantado.edu.vn/api/category/list.php").then(function(response) {
+        $scope.playlists = response.data;
+    });
+	
+	var playlistId = $stateParams.playlistId;
+	$scope.playlistId = playlistId;
+	$http.get("https://pantado.edu.vn/api/category/lecture/list.php?categoryId=" + playlistId).then(function(response) {
+        $scope.lectures = response.data;
     });
 	
 	$scope.$on('$ionicView.enter', function(e) {
 		check_access($state);
 	});
 	
+})
+.controller('LectureCtrl', function($scope, $stateParams, $state, $http, $sceDelegate, $sce) {
+	$scope.trustSrc = function(src) {
+		return $sce.trustAsResourceUrl(src);
+	  }
+	 
+	$http.get("https://pantado.edu.vn/api/category/list.php").then(function(response) {
+        $scope.playlists = response.data;
+    });
+	
+	$scope.lecture = {};
+	var playlistId = $stateParams.playlistId;
+	var lectureId = $stateParams.lectureId;
+	$scope.playlistId = playlistId;
+	$scope.lectureId = lectureId;
+	$http.get("https://pantado.edu.vn/api/category/lecture/detail.php?categoryId=" + playlistId+'&lectureId=' + lectureId).then(function(response) {
+		$scope.lecture = response.data;
+		var youtubeId = $scope.lecture.url.split('=').pop();
+		$scope.lecture.youtubeId = youtubeId;
+		$scope.lecture.embedUrl = 'https://www.youtube.com/embed/' + youtubeId;
+		
+    });
+	
+	$scope.$on('$ionicView.enter', function(e) {
+		check_access($state);
+	});
 });
+
+
 
 function check_access($state) {
 	if('1' === localStorage.getItem('userLogined')) {
